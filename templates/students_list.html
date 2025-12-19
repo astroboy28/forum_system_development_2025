@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% set title = "Students" %}
+
+{% block content %}
+  <section class="page-head">
+    <div>
+      <h1>生徒</h1>
+      <p class="muted">生徒レコードを管理します (作成、表示、編集、削除)。</p>
+    </div>
+
+    <form class="search" method="GET" action="{{ url_for('students_list') }}">
+      <input
+        type="text"
+        name="q"
+        placeholder="名前、メール、コースなどを検索..."
+        value="{{ q if q else '' }}"
+        aria-label="Search students"
+      />
+      <button class="btn" type="submit">検索</button>
+      {% if q %}
+        <a class="btn btn-ghost" href="{{ url_for('students_list') }}">クリア</a>
+      {% endif %}
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2 class="card-title">学生リスト</h2>
+      <div class="card-actions">
+        <a class="btn btn-primary" href="{{ url_for('students_new') }}">+ 学生を追加</a>
+      </div>
+    </div>
+
+    {% if students and students|length > 0 %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>氏名</th>
+              <th>メール</th>
+              <th>コース</th>
+              <th>学年</th>
+              <th>作成日時</th>
+              <th class="col-actions">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in students %}
+              <tr>
+                <td class="mono">{{ s["id"] }}</td>
+                <td class="strong">{{ s["full_name"] }}</td>
+                <td><a class="link" href="mailto:{{ s['email'] }}">{{ s["email"] }}</a></td>
+                <td>{{ s["course"] }}</td>
+                <td class="mono">{{ s["year_level"] }}</td>
+                <td class="mono">{{ s["created_at"] }}</td>
+                <td class="actions">
+                  <a class="btn btn-sm" href="{{ url_for('students_detail', student_id=s['id']) }}">表示</a>
+                  <a class="btn btn-sm" href="{{ url_for('students_edit', student_id=s['id']) }}">編集</a>
+                  <a class="btn btn-sm btn-danger" href="{{ url_for('students_delete', student_id=s['id']) }}">削除</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="empty">
+        <p><strong>学生が見つかりません。</strong></p>
+        <p class="muted">学生を追加するか、検索条件を調整してください。</p>
+        <a class="btn btn-primary" href="{{ url_for('students_new') }}">+ 最初の学生を追加</a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

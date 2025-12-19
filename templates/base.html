@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title if title else "Student SIS" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="{{ url_for('students_list') }}">
+          <span class="brand-mark">SIS</span>
+          <span class="brand-text">Student Information System</span>
+        </a>
+
+        <nav class="nav">
+          <a class="nav-link" href="{{ url_for('students_list') }}">生徒</a>
+          <a class="nav-link nav-primary" href="{{ url_for('students_new') }}">+ 生徒追加</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <section class="alerts" aria-live="polite">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category|e }}">
+                <div class="alert-icon">
+                  {% if category == "success" %}✓{% else %}!{% endif %}
+                </div>
+                <div class="alert-message">{{ message }}</div>
+              </div>
+            {% endfor %}
+          </section>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <small>© {{ 2025 }} Student SIS • Flask + SQLite</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% set title = "Add Student" if mode == "new" else "Edit Student" %}
+
+{% block content %}
+  <section class="page-head">
+    <div>
+      <h1>{{ "生徒追加" if mode == "new" else "生徒を編集" }}</h1>
+      <p class="muted">
+        {% if mode == "new" %}
+          検証付きの新しい学生レコードを作成します。
+        {% else %}
+          学生レコードを慎重に更新します。
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="page-actions">
+      <a class="btn btn-ghost" href="{{ url_for('students_list') }}">← リストに戻る</a>
+      {% if mode != "new" %}
+        <a class="btn" href="{{ url_for('students_detail', student_id=student_id) }}">詳細を表示</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2 class="card-title">学生フォーム</h2>
+      <p class="muted">マークの<span class="req">*</span> 付いたフィールドは必須です</p>
+    </div>
+
+    <form class="form" method="POST" action="">
+      <div class="grid">
+        <div class="field">
+          <label for="full_name">氏名 <span class="req">*</span></label>
+          <input
+            id="full_name"
+            name="full_name"
+            type="text"
+            minlength="2"
+            required
+            placeholder="Tarou Momo"
+            value="{{ (student['full_name'] if student else '') }}"
+          />
+          <div class="help">最低2文字。</div>
+        </div>
+
+        <div class="field">
+          <label for="email">メール <span class="req">*</span></label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="tarou@example.com"
+            value="{{ (student['email'] if student else '') }}"
+          />
+          <div class="help">有効なメールアドレスである必要があります。一意である必要があります。</div>
+        </div>
+
+        <div class="field">
+          <label for="course">コース <span class="req">*</span></label>
+          <input
+            id="course"
+            name="course"
+            type="text"
+            required
+            placeholder="BSIT"
+            value="{{ (student['course'] if student else '') }}"
+          />
+          <div class="help">例: BSIT, BSCS, BSECE など</div>
+        </div>
+
+        <div class="field">
+          <label for="year_level">学年 <span class="req">*</span></label>
+          <select id="year_level" name="year_level" required>
+            {% set selected_year = (student['year_level'] if student else '') %}
+            <option value="" {% if selected_year == '' %}selected{% endif %} disabled>年を選択</option>
+            {% for y in [1,2,3,4,5] %}
+              <option value="{{ y }}" {% if selected_year|string == y|string %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+          </select>
+          <div class="help">1から5までの数字である必要があります。</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+          {{ "生徒を作成" if mode == "new" else "変更を保存" }}
+        </button>
+        <a class="btn btn-ghost" href="{{ url_for('students_list') }}">キャンセル</a>
+      </div>
+
+      <div class="note">
+        <strong>リマインダー：</strong> 検証は HTML だけでなく、サーバー側 (Flask) でも機能する必要があります。
+      </div>
+    </form>
+  </section>
+{% endblock %}

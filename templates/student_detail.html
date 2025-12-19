@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% set title = "Student Details" %}
+
+{% block content %}
+  <section class="page-head">
+    <div>
+      <h1>学生の詳細</h1>
+      <p class="muted">1 人の生徒の記録を表示します (読み取り専用)。</p>
+    </div>
+
+    <div class="page-actions">
+      <a class="btn btn-ghost" href="{{ url_for('students_list') }}">リストに戻る</a>
+      <a class="btn" href="{{ url_for('students_edit', student_id=student['id']) }}">編集</a>
+      <a class="btn btn-danger" href="{{ url_for('students_delete', student_id=student['id']) }}">削除</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2 class="card-title">{{ student["full_name"] }}</h2>
+      <p class="muted">生徒 ID: <span class="mono">{{ student["id"] }}</span></p>
+    </div>
+
+    <div class="details">
+      <div class="detail-row">
+        <div class="label">メール</div>
+        <div class="value"><a class="link" href="mailto:{{ student['email'] }}">{{ student["email"] }}</a></div>
+      </div>
+
+      <div class="detail-row">
+        <div class="label">コース</div>
+        <div class="value">{{ student["course"] }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="label">学年</div>
+        <div class="value mono">{{ student["year_level"] }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="label">作成日時</div>
+        <div class="value mono">{{ student["created_at"] }}</div>
+      </div>
+    </div>
+
+    <div class="card-foot">
+      <a class="btn" href="{{ url_for('students_edit', student_id=student['id']) }}">編集</a>
+      <a class="btn btn-danger" href="{{ url_for('students_delete', student_id=student['id']) }}">削除</a>
+    </div>
+  </section>
+{% endblock %}

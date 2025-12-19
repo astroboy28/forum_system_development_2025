@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% set title = "Confirm Delete" %}
+
+{% block content %}
+  <section class="page-head">
+    <div>
+      <h1>削除を確認</h1>
+      <p class="muted">この操作は元に戻せません。</p>
+    </div>
+
+    <div class="page-actions">
+      <a class="btn btn-ghost" href="{{ url_for('students_detail', student_id=student['id']) }}">← 詳細に戻る</a>
+    </div>
+  </section>
+
+  <section class="card danger">
+    <div class="card-head">
+      <h2 class="card-title">生徒を削除</h2>
+      <p class="muted">削除する学生:</p>
+    </div>
+
+    <div class="danger-box">
+      <p class="strong">{{ student["full_name"] }}</p>
+      <p class="muted">
+        ID: <span class="mono">{{ student["id"] }}</span> •
+        Email: <span class="mono">{{ student["email"] }}</span>
+      </p>
+    </div>
+
+    <form method="POST" action="">
+      <div class="form-actions">
+        <button class="btn btn-danger" type="submit">削除</button>
+        <a class="btn btn-ghost" href="{{ url_for('students_detail', student_id=student['id']) }}">キャンセル</a>
+      </div>
+      <div class="note">
+        <strong>ヒント：</strong> 誤って削除されないように、削除には POST リクエスト (GET ではない) を使用します。
+      </div>
+    </form>
+  </section>
+{% endblock %}
